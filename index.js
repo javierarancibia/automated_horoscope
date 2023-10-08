@@ -1,5 +1,6 @@
 const express = require('express')
 const videoshow = require('videoshow')
+const videoOptions = require('./utils/videoOptions')
 const app = express()
 const port = 5000
 
@@ -18,20 +19,6 @@ app.get('/', (req, res) => {
                 caption: `Image One is sign ${sign} bla bla bla`
             },
         ]
-
-        const videoOptions = {
-            fps: 25,
-            loop: 5, // seconds
-            transition: true,
-            transitionDuration: 1, // seconds
-            videoBitrate: 1024,
-            videoCodec: 'libx264',
-            size: '640x?',
-            audioBitrate: '128k',
-            audioChannels: 2,
-            format: 'mp4',
-            pixelFormat: 'yuv420p'
-        }
 
         videoshow(images, videoOptions)
         .audio('./audio/1.mp3')
