@@ -1,6 +1,8 @@
 const express = require('express')
 const videoshow = require('videoshow')
+const axios = require('axios')
 const videoOptions = require('./utils/videoOptions')
+const stringSplitter = require('./utils/stringSplitter')
 const app = express()
 const port = 5000
 
@@ -9,6 +11,8 @@ app.get('/', (req, res) => {
 
     SIGNS.forEach(sign => {
         // 1.- Call day horoscope 
+        // const signData = await axios.get(`https://horoscope-app-api.vercel.app/api/v1/get-horoscope/daily?sign=${sign}&day=today`)
+                
         const images = [
             {
                 path: `./images/${sign}/1.jpeg`,
