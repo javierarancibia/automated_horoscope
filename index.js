@@ -8,11 +8,9 @@ const port = 5000
 
 app.get('/', (req, res) => {
     const SIGNS = [ 'aries', 'scorpio']
+    // 1.- Call day horoscope to private API to get all daily horoscopes 
 
     SIGNS.forEach(sign => {
-        // 1.- Call day horoscope 
-        // const signData = await axios.get(`https://horoscope-app-api.vercel.app/api/v1/get-horoscope/daily?sign=${sign}&day=today`)
-                
         const images = [
             {
                 path: `./images/${sign}/1.jpeg`,
