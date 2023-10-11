@@ -17,7 +17,7 @@ const SignDataArraySchema = mongoose.Schema(
 
 const HoroscopeSchema = new mongoose.Schema({
     week: Date,
-    signData: [ SignDataArraySchema ]
+    signsData: [ SignDataArraySchema ]
 })
 
 module.exports = mongoose.model("Horoscope", HoroscopeSchema)

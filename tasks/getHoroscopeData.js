@@ -36,7 +36,7 @@ const fetchHoroscopeWeekData = async () => {
 
     weekHoroscope.then(res => {
         const date = new Date()
-        storeDataDB({ week: date, signData: res })
+        storeDataDB({ week: date, signsData: res })
     })
 
 }
