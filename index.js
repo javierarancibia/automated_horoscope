@@ -19,13 +19,18 @@ app.get('/', async (req, res) => {
         const today = date.toLocaleString("en-US", { weekday: "long" });
         const signsDayData = todayHoroscope.signsData.map(sign => ({ sign: sign.sign, dayData: sign.weekData.find(x => x.day === today)  }))
 
-        signsDayData.forEach(sign => {
-            const splittedString = stringSplitter(sign.dayData.content, 70)
-            const images = splittedString.map((string, i) => ({ path: `./images/${sign.sign}/${i + 1}.jpeg`, caption: string}))
+        const createVideo = async (index) => {
+            if (index >= signsDayData.length) {
+              console.log('All videos created');
+              return;
+            }
+            const signData = signsDayData[index]
+            const splittedString = stringSplitter(signData.dayData.content, 70)
+            const images = splittedString.map((string, i) => ({ path: `./images/${signData.sign}/${i + 1}.jpeg`, caption: string}))
 
             videoshow(images, videoOptions)
             .audio('./audio/1.mp3')
-            .save(`${sign.sign}.mp4`)
+            .save(`${signData.sign}.mp4`)
             .on('start', function (command) {
                 console.log('ffmpeg process started:', command)
             })
@@ -36,8 +41,10 @@ app.get('/', async (req, res) => {
             .on('end', function (output) {
                 console.error('Video created in:', output)
                 console.log(output)
+                createVideo(index + 1);
             })
-        });
+        }
+        createVideo(0)
         res.json({ response: signsDayData })
     } catch (error) {
         console.log(error);        
