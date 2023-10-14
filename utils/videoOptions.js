@@ -6,7 +6,7 @@ const videoOptions = {
     transitionDuration: 1, // seconds
     videoBitrate: 1024,
     videoCodec: 'libx264',
-    size: '640x?',
+    size: '1080x1920',
     audioBitrate: '128k',
     audioChannels: 2,
     format: 'mp4',

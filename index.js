@@ -7,8 +7,14 @@ const stringSplitter = require('./utils/stringSplitter')
 const Horoscope = require('./src/models/Horoscope')
 const app = express()
 const port = 5000
+const { IgApiClient } = require('instagram-private-api');
+const fs = require('fs');
+const util = require('util');
+const readFile = fs.readFile;
+const promisify = util.promisify;
+const readFileAsync = promisify(readFile);
 
-app.get('/', async (req, res) => {
+app.get('/videos', async (req, res) => {
     try {
         // 1.- Call day horoscope to private API to get all daily horoscopes 
         connectDB(process.env.MONGO_URI)
@@ -48,6 +54,25 @@ app.get('/', async (req, res) => {
         res.json({ response: signsDayData })
     } catch (error) {
         console.log(error);        
+    }
+})
+
+process.env.IG_USERNAME, process.env.IG_PASSWORD
+
+app.get('/ig', async (req, res) => {
+    try {
+        const ig = new IgApiClient();
+        ig.state.generateDevice(process.env.IG_USERNAME);
+        const logged = await ig.account.login(process.env.IG_USERNAME, process.env.IG_PASSWORD);
+        
+        const postVideo = await ig.publish.video({ 
+            video: await readFileAsync("./aquarius.mp4"), 
+            coverImage: await readFileAsync("./test1.jpg"),
+            caption: 'Really nice photo from the internet!', 
+        });
+        console.log(postVideo)
+    } catch (error) {
+        console.log(error)   
     }
 })
 
