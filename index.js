@@ -13,6 +13,19 @@ const util = require('util');
 const readFile = fs.readFile;
 const promisify = util.promisify;
 const readFileAsync = promisify(readFile);
+const imageOverlay = require("./utils/imageOverlay")
+
+app.get('/', async (req, res) => { 
+    connectDB(process.env.MONGO_URI)
+    const todayHoroscope = await Horoscope.findOne({}, {}, { sort: { timestamp: -1 } });
+    // Get day of the week in string
+    const date = new Date();
+    const today = date.toLocaleString("en-US", { weekday: "long" });
+    const signsDayData = todayHoroscope.signsData.map(sign => ({ sign: sign.sign, dayData: sign.weekData.find(x => x.day === today)  }))
+    res.json({ response: signsDayData })
+})
+
+
 
 app.get('/videos', async (req, res) => {
     try {
@@ -31,8 +44,9 @@ app.get('/videos', async (req, res) => {
               return;
             }
             const signData = signsDayData[index]
-            const splittedString = stringSplitter(signData.dayData.content, 70)
-            const images = splittedString.map((string, i) => ({ path: `./images/${signData.sign}/${i + 1}.jpeg`, caption: string}))
+            const splittedString = stringSplitter(signData.dayData.content, 120)
+            // const images = splittedString.map((string, i) => ({ path: `./images/${signData.sign}/${i + 1}.jpeg`, caption: string}))
+            const images = splittedString.map((string, i) => ({ path: `./test2.jpg`, caption: string}))
 
             videoshow(images, videoOptions)
             .audio('./audio/1.mp3')
@@ -47,6 +61,7 @@ app.get('/videos', async (req, res) => {
             .on('end', function (output) {
                 console.error('Video created in:', output)
                 console.log(output)
+                imageOverlay(signData.sign, signData.dayData.day)
                 createVideo(index + 1);
             })
         }
@@ -61,16 +76,36 @@ process.env.IG_USERNAME, process.env.IG_PASSWORD
 
 app.get('/ig', async (req, res) => {
     try {
+        // Log in to Instagram
         const ig = new IgApiClient();
         ig.state.generateDevice(process.env.IG_USERNAME);
         const logged = await ig.account.login(process.env.IG_USERNAME, process.env.IG_PASSWORD);
-        
-        const postVideo = await ig.publish.video({ 
-            video: await readFileAsync("./aquarius.mp4"), 
-            coverImage: await readFileAsync("./test1.jpg"),
-            caption: 'Really nice photo from the internet!', 
-        });
-        console.log(postVideo)
+
+        // Get day of the week in string
+        connectDB(process.env.MONGO_URI)
+        const todayHoroscope = await Horoscope.findOne({}, {}, { sort: { timestamp: -1 } });
+        const date = new Date();
+        const today = date.toLocaleString("en-US", { weekday: "long" });
+        const signsDayData = todayHoroscope.signsData.map(sign => ({ sign: sign.sign, dayData: sign.weekData.find(x => x.day === today)  }))
+
+        const postVideo = async (index) => {
+            if (index >= signsDayData.length) {
+              console.log('All videos have been posted');
+              return;
+            }
+            const signData = signsDayData[index]
+            const postEachVideo = await ig.publish.video({ 
+                video: await readFileAsync(`./${signData.sign}.mp4`), 
+                coverImage: await readFileAsync(`./${signData.sign}.jpg`),
+                caption: `Today Horoscope for ${signData.sign}`, 
+            });
+            console.log(postEachVideo)
+            setTimeout(() => {
+                postVideo(index + 1);
+            }, [20000])
+        }
+        postVideo(0)
+
     } catch (error) {
         console.log(error)   
     }
