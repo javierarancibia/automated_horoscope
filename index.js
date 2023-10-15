@@ -18,11 +18,7 @@ const imageOverlay = require("./utils/imageOverlay")
 app.get('/', async (req, res) => { 
     connectDB(process.env.MONGO_URI)
     const todayHoroscope = await Horoscope.findOne({}, {}, { sort: { timestamp: -1 } });
-    // Get day of the week in string
-    const date = new Date();
-    const today = date.toLocaleString("en-US", { weekday: "long" });
-    const signsDayData = todayHoroscope.signsData.map(sign => ({ sign: sign.sign, dayData: sign.weekData.find(x => x.day === today)  }))
-    res.json({ response: signsDayData })
+    res.json({ response: todayHoroscope })
 })
 
 
