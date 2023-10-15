@@ -1,7 +1,7 @@
 
 const videoOptions = {
     fps: 25,
-    loop: 8, // seconds
+    loop: 9, // seconds
     transition: true,
     transitionDuration: 1, // seconds
     videoBitrate: 1024,

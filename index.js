@@ -44,7 +44,7 @@ app.get('/videos', async (req, res) => {
               return;
             }
             const signData = signsDayData[index]
-            const splittedString = stringSplitter(signData.dayData.content, 120)
+            const splittedString = stringSplitter(signData.dayData.content, 160)
             // const images = splittedString.map((string, i) => ({ path: `./images/${signData.sign}/${i + 1}.jpeg`, caption: string}))
             const images = splittedString.map((string, i) => ({ path: `./test2.jpg`, caption: string}))
 
