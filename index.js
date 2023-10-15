@@ -46,7 +46,7 @@ app.get('/videos', async (req, res) => {
             const signData = signsDayData[index]
             const splittedString = stringSplitter(signData.dayData.content, 160)
             // const images = splittedString.map((string, i) => ({ path: `./images/${signData.sign}/${i + 1}.jpeg`, caption: string}))
-            const images = splittedString.map((string, i) => ({ path: `./test2.jpg`, caption: string}))
+            const images = splittedString.map((string, i) => ({ path: `./images/${signData.sign}/cover2.jpg`, caption: string}))
 
             videoshow(images, videoOptions)
             .audio('./audio/1.mp3')
@@ -90,7 +90,7 @@ app.get('/ig', async (req, res) => {
 
         const postVideo = async (index) => {
             if (index >= signsDayData.length) {
-              console.log('All videos have been posted');
+              console.log('All videos have been posted'); // Send email
               return;
             }
             const signData = signsDayData[index]
