@@ -7,13 +7,8 @@ const stringSplitter = require('./utils/stringSplitter')
 const Horoscope = require('./src/models/Horoscope')
 const app = express()
 const port = 5000
-const { IgApiClient } = require('instagram-private-api');
-const fs = require('fs');
-const util = require('util');
-const readFile = fs.readFile;
-const promisify = util.promisify;
-const readFileAsync = promisify(readFile);
 const imageOverlay = require("./utils/imageOverlay")
+const storeIGVideos = require("./utils/storeIGVideos")
 
 app.get('/', async (req, res) => { 
     connectDB(process.env.MONGO_URI)
@@ -22,8 +17,7 @@ app.get('/', async (req, res) => {
 })
 
 
-
-app.get('/videos', async (req, res) => {
+app.post('/api/v1/create-videos', async (req, res) => {
     try {
         // 1.- Call day horoscope to private API to get all daily horoscopes 
         connectDB(process.env.MONGO_URI)
@@ -32,11 +26,12 @@ app.get('/videos', async (req, res) => {
         // Get day of the week in string
         const date = new Date();
         const today = date.toLocaleString("en-US", { weekday: "long" });
-        const signsDayData = todayHoroscope.signsData.map(sign => ({ sign: sign.sign, dayData: sign.weekData.find(x => x.day === today)  }))
+        const signsDayData = todayHoroscope.signsData.map(sign => ({ sign: sign.sign, dayData: sign.weekData.find(x => x.day === "Monday")  }))
 
         const createVideo = async (index) => {
             if (index >= signsDayData.length) {
               console.log('All videos created');
+              storeIGVideos()
               return;
             }
             const signData = signsDayData[index]
@@ -68,44 +63,6 @@ app.get('/videos', async (req, res) => {
     }
 })
 
-process.env.IG_USERNAME, process.env.IG_PASSWORD
-
-app.get('/ig', async (req, res) => {
-    try {
-        // Log in to Instagram
-        const ig = new IgApiClient();
-        ig.state.generateDevice(process.env.IG_USERNAME);
-        const logged = await ig.account.login(process.env.IG_USERNAME, process.env.IG_PASSWORD);
-
-        // Get day of the week in string
-        connectDB(process.env.MONGO_URI)
-        const todayHoroscope = await Horoscope.findOne({}, {}, { sort: { timestamp: -1 } });
-        const date = new Date();
-        const today = date.toLocaleString("en-US", { weekday: "long" });
-        const signsDayData = todayHoroscope.signsData.map(sign => ({ sign: sign.sign, dayData: sign.weekData.find(x => x.day === today)  }))
-
-        const postVideo = async (index) => {
-            if (index >= signsDayData.length) {
-              console.log('All videos have been posted'); // Send email
-              return;
-            }
-            const signData = signsDayData[index]
-            const postEachVideo = await ig.publish.video({ 
-                video: await readFileAsync(`./${signData.sign}.mp4`), 
-                coverImage: await readFileAsync(`./${signData.sign}.jpg`),
-                caption: `Today Horoscope for ${signData.sign}`, 
-            });
-            console.log(postEachVideo)
-            setTimeout(() => {
-                postVideo(index + 1);
-            }, [20000])
-        }
-        postVideo(0)
-
-    } catch (error) {
-        console.log(error)   
-    }
-})
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
