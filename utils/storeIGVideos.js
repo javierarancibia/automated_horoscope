@@ -21,7 +21,7 @@ const storeIGVideos = async (req, res) => {
         const todayHoroscope = await Horoscope.findOne({}, {}, { sort: { timestamp: -1 } });
         const date = new Date();
         const today = date.toLocaleString("en-US", { weekday: "long" });
-        const signsDayData = todayHoroscope.signsData.map(sign => ({ sign: sign.sign, dayData: sign.weekData.find(x => x.day === "Monday")  }))
+        const signsDayData = todayHoroscope.signsData.map(sign => ({ sign: sign.sign, dayData: sign.weekData.find(x => x.day === "Wednesday")  }))
 
         const postVideo = async (index) => {
             if (index >= signsDayData.length) {
@@ -33,7 +33,7 @@ const storeIGVideos = async (req, res) => {
             const postEachVideo = await ig.publish.video({ 
                 video: await readFileAsync(`./${signData.sign}.mp4`), 
                 coverImage: await readFileAsync(`./${signData.sign}.jpg`),
-                caption: `Today Horoscope for ${signData.sign}`, 
+                caption: `Today Horoscope for ${signData.sign} #instareels #reelvideo #horoscope #storyteller #reelsinstagram #motivations #digitalart #instaart #ai #instadaily #2023`, 
             });
             console.log(postEachVideo)
             setTimeout(() => {

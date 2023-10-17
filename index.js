@@ -26,7 +26,7 @@ app.post('/api/v1/create-videos', async (req, res) => {
         // Get day of the week in string
         const date = new Date();
         const today = date.toLocaleString("en-US", { weekday: "long" });
-        const signsDayData = todayHoroscope.signsData.map(sign => ({ sign: sign.sign, dayData: sign.weekData.find(x => x.day === "Monday")  }))
+        const signsDayData = todayHoroscope.signsData.map(sign => ({ sign: sign.sign, dayData: sign.weekData.find(x => x.day === "Wednesday")  }))
 
         const createVideo = async (index) => {
             if (index >= signsDayData.length) {
@@ -41,7 +41,7 @@ app.post('/api/v1/create-videos', async (req, res) => {
 
             videoshow(images, videoOptions)
             .audio('./audio/1.mp3')
-            .save(`${signData.sign}.mp4`)
+            .save(`./images/${signData.sign}/${signData.sign}.mp4`)
             .on('start', function (command) {
                 console.log('ffmpeg process started:', command)
             })

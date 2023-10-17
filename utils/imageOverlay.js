@@ -9,7 +9,7 @@ async function imageOverlay(sign, day) {
     image.print(fontTitle, 100, 750, sign.toUpperCase());
     image.print(fontSubtitle, 100, 900, day);
     // Writing image after processing
-    await image.writeAsync(`./${sign}.jpg`);
+    await image.writeAsync(`./images/${sign}/${sign}.jpg`);
     console.log("Image is processed succesfully");
 }
 
