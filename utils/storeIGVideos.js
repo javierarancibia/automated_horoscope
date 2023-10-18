@@ -31,8 +31,8 @@ const storeIGVideos = async (req, res) => {
             }
             const signData = signsDayData[index]
             const postEachVideo = await ig.publish.video({ 
-                video: await readFileAsync(`./${signData.sign}.mp4`), 
-                coverImage: await readFileAsync(`./${signData.sign}.jpg`),
+                video: await readFileAsync(`./images/${signData.sign}/${signData.sign}.mp4`), 
+                coverImage: await readFileAsync(`./images/${signData.sign}/${signData.sign}.jpg`),
                 caption: `Today Horoscope for ${signData.sign} #instareels #reelvideo #horoscope #storyteller #reelsinstagram #motivations #digitalart #instaart #ai #instadaily #2023`, 
             });
             console.log(postEachVideo)
@@ -48,4 +48,5 @@ const storeIGVideos = async (req, res) => {
     }
 }
 
-module.exports = storeIGVideos
+// module.exports = storeIGVideos
+storeIGVideos()
