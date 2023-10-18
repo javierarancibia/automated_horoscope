@@ -48,5 +48,5 @@ const storeIGVideos = async (req, res) => {
     }
 }
 
-// module.exports = storeIGVideos
-storeIGVideos()
+module.exports = storeIGVideos
+// storeIGVideos()

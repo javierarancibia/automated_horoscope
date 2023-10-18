@@ -40,7 +40,7 @@ app.post('/api/v1/create-videos', async (req, res) => {
             const images = splittedString.map((string, i) => ({ path: `./images/${signData.sign}/cover2.jpg`, caption: string}))
 
             videoshow(images, videoOptions)
-            .audio('./audio/1.mp3')
+            .audio(`./audio/${index}.mp3`)
             .save(`./images/${signData.sign}/${signData.sign}.mp4`)
             .on('start', function (command) {
                 console.log('ffmpeg process started:', command)
