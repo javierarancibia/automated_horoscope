@@ -5,8 +5,12 @@ const imageOverlay = require("../../utils/imageOverlay")
 const storeIGVideos = require("../../utils/storeIGVideos")
 const path = require('path')
 
+const kidsForm = (req, res) => {
+    const filePath = path.join(__dirname, '../../public/index.html');
+    res.sendFile(filePath);
+}
+
 const createTale = async (req, res) => {
-    console.log(req.body)
     // try {
     //     const createVideo = async (index) => {
     //         if (index >= signsDayData.length) {
