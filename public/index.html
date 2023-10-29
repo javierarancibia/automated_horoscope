@@ -3,27 +3,62 @@
 
 </head>
 <body>
-    <form action="/kids/create-tale" method="post" enctype="multipart/form-data">
-        <label for="scene1">Titulo del cuento</label>
-        <input type="text" id="title" name="title"><br>
-        <label for="scene1">Escena 1</label>
-        <input type="text" id="scene1" name="scene1"><br>
-        <input type="file" name="sceneImage1" accept="image/png, image/jpeg" /><br>
-        <label for="scene2">Escena 2</label>
-        <input type="text" id="scene2" name="scene2"><br><br>
-        <input type="file" name="sceneImage2" accept="image/png, image/jpeg" /><br>
-        <label for="scene3">Escena 3</label>
-        <input type="text" id="scene3" name="scene3"><br><br>
-        <input type="file" name="sceneImage3" accept="image/png, image/jpeg" /><br>
-        <label for="scene4">Escena 4</label>
-        <input type="text" id="scene4" name="scene4"><br><br>
-        <input type="file" name="sceneImage4" accept="image/png, image/jpeg" /><br>
-        <label for="scene5">Escena 5</label>
-        <input type="text" id="scene5" name="scene5"><br><br>
-        <input type="file" name="sceneImage5" accept="image/png, image/jpeg" /><br>
-        <input type="submit" value="Submit">
-    </form>
+    <div class="container my-5">
+        <form action="/kids/create-tale" method="post" enctype="multipart/form-data">
+            <div style="width:100%; border: solid 1px blue; padding: 1.5rem; margin: 1rem 0;border-radius: 15px;">
+                <label for="title" class="form-label d-block">Titulo del cuento</label>
+                <input type="text" name="title" class="form-control" placeholder="Título"><br>
+            </div>
+            <div style="width:100%; border: solid 1px blue; padding: 1.5rem; margin: 1rem 0;border-radius: 15px;">
+                <label for="scene1" class="form-label d-block">Escena 1</label>
+                <input type="text" name="scene1" class="form-control" placeholder="Escena 1"><br>
+                <input type="file" name="sceneImage1" accept="image/png, image/jpeg" class="my-2" onchange="previewImage(this, 'imagePreview1')" /><br>
+                <img id="imagePreview1" src="#" alt="Image Preview" style="display: none; max-width: 300px;">
+            </div>
+            <div style="width:100%; border: solid 1px blue; padding: 1.5rem; margin: 1rem 0;border-radius: 15px;">
+                <label for="scene2"  class="form-label d-block">Escena 2</label>
+                <input type="text" name="scene2" class="form-control" placeholder="Escena 2"><br>
+                <input type="file" name="sceneImage2" accept="image/png, image/jpeg" class="my-2" onchange="previewImage(this, 'imagePreview2')" /><br>
+                <img id="imagePreview2" src="#" alt="Image Preview" style="display: none; max-width: 300px;">
+            </div>
+            <div style="width:100%; border: solid 1px blue; padding: 1.5rem; margin: 1rem 0;border-radius: 15px;">
+                <label for="scene3" class="form-label d-block">Escena 3</label>
+                <input type="text" name="scene3" class="form-control" placeholder="Escena 3"><br>
+                <input type="file" name="sceneImage3" accept="image/png, image/jpeg" class="my-2" onchange="previewImage(this, 'imagePreview3')" /><br>
+                <img id="imagePreview3" src="#" alt="Image Preview" style="display: none; max-width: 300px;">
+            </div>
+            <div style="width:100%; border: solid 1px blue; padding: 1.5rem; margin: 1rem 0;border-radius: 15px;">
+                <label for="scene4" class="form-label d-block">Escena 4</label>
+                <input type="text" name="scene4" class="form-control" placeholder="Escena 4"><br>
+                <input type="file" name="sceneImage4" accept="image/png, image/jpeg" class="my-2" onchange="previewImage(this, 'imagePreview4')" /><br>
+                <img id="imagePreview4" src="#" alt="Image Preview" style="display: none; max-width: 300px;">
+            </div>
+            <div style="width:100%; border: solid 1px blue; padding: 1.5rem; margin: 1rem 0;border-radius: 15px;">
+                <label for="scene1"  class="form-label d-block">Escena 5</label>
+                <input type="text" name="scene5" class="form-control" placeholder="Escena 5"><br>
+                <input type="file" name="sceneImage5" accept="image/png, image/jpeg" class="my-2" onchange="previewImage(this, 'imagePreview5')" /><br>
+                <img id="imagePreview5" src="#" alt="Image Preview" style="display: none; max-width: 300px;">
+            </div>
+            <input type="submit" style="background-color: blue;color:antiquewhite; width: 8rem; margin:auto" value="Submit">
+        </form>
+    </div>
 </body>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script>
+    function previewImage(input, imgId) {
+        const imagePreview = document.getElementById(imgId);
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            imagePreview.style.display = 'none';
+        }
+    }
+</script>
+
 </html>
