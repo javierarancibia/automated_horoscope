@@ -15,10 +15,10 @@ const storage = multer.diskStorage({
   destination: function(req, file, cb) {
     if (file.fieldname.includes("historyImage")){
       return cb(null, "./uploads/history")
-    } else {
+    } 
+    if (file.fieldname.includes("kidsImage")) {
       return cb(null, "./uploads/kids")
     }
-    
   },
   filename: function (req, file, cb) {
     cb(null, file.fieldname + path.extname(file.originalname))
@@ -27,9 +27,9 @@ const storage = multer.diskStorage({
 const upload = multer({storage})
 
 // Handle Kids file upload
-app.post('/kids/create-tale', upload.fields([{ name: 'sceneImage1' }, { name: 'sceneImage2' }, { name: 'sceneImage3' }, { name: 'sceneImage4' }, { name: 'sceneImage5' }]), async (req, res) => {
+app.post('/kids/create-tale', upload.fields([{ name: 'kidsImage1' }, { name: 'kidsImage2' }, { name: 'kidsImage3' }, { name: 'kidsImage4' }, { name: 'kidsImage5' }]), async (req, res) => {
   const textData = [ req.body.scene1, req.body.scene2, req.body.scene3, req.body.scene4, req.body.scene5 ];
-  const imageFiles = [ req.files.sceneImage1, req.files.sceneImage2, req.files.sceneImage3, req.files.sceneImage4, req.files.sceneImage5 ];
+  const imageFiles = [ req.files.kidsImage1, req.files.kidsImage2, req.files.kidsImage3, req.files.kidsImage4, req.files.kidsImage5 ];
   try {
     const storeSingleVideoResponse = await storeSingleVideo(textData, imageFiles, req.body.title, "kids")
     storeSingleVideoResponse && res.send(storeSingleVideoResponse);
