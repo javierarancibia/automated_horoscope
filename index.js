@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const multer  = require('multer')
 const path = require('path');
 const storeSingleVideo = require("./utils/storeSingleVideo")
+require("dotenv").config()
 
 // Middleware for each query
 app.use(bodyParser.json()) // for parsing application/json
@@ -42,9 +43,8 @@ app.post('/kids/create-tale', upload.fields([{ name: 'kidsImage1' }, { name: 'ki
 app.post('/history/create-tale', upload.fields([{ name: 'historyImage1' }, { name: 'historyImage2' }, { name: 'historyImage3' }, { name: 'historyImage4' }, { name: 'historyImage5' }]), async (req, res) => {
   const textData = [ req.body.historyScene1, req.body.historyScene2, req.body.historyScene3, req.body.historyScene4, req.body.historyScene5 ];
   const imageFiles = [ req.files.historyImage1, req.files.historyImage2, req.files.historyImage3, req.files.historyImage4, req.files.historyImage5 ];
-  console.log(textData, imageFiles)
   try {
-    const storeSingleVideoResponse = await storeSingleVideo(textData, imageFiles, req.body.title, "history")
+    const storeSingleVideoResponse = await storeSingleVideo(textData, imageFiles, req.body.title, "history", process.env.IG_HISTORYTELLERS_USERNAME, process.env.IG_HISTORYTELLERS_PASSWORD)
     storeSingleVideoResponse && res.send(storeSingleVideoResponse);
   } catch (error) {
     console.log(error)

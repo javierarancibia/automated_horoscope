@@ -10,7 +10,7 @@ const videoOptions = require("./videoOptions")
 const imageOverlayKids = require("./imageOverlayKids")
 const uploadIGKidsVideo = require("./uploadIGKidsVideo")
 
-const storeSingleVideo = async (textData, imageFiles, title, accountType) => {
+const storeSingleVideo = async (textData, imageFiles, title, accountType, instagramUser, instagramPassword) => {
     const sortedData = imageFiles.map((x, i) => ({ image: x[0].filename, script: textData[i] }))
     console.log(sortedData)
 
@@ -28,7 +28,7 @@ const storeSingleVideo = async (textData, imageFiles, title, accountType) => {
             })
             .on('end', function (output) {
                 imageOverlayKids(sortedData[0].image, title, accountType)
-                // uploadIGKidsVideo(output)
+                uploadIGKidsVideo(output, accountType, instagramUser, instagramPassword)
             })
     } catch (error) {
         console.log(error)   

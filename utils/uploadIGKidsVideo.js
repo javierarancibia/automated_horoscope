@@ -6,17 +6,17 @@ const readFile = fs.readFile;
 const promisify = util.promisify;
 const readFileAsync = promisify(readFile);
 
-const uploadIGKidsVideo = async uploadPath => {
+const uploadIGKidsVideo = async (uploadPath, accountType, instagramUser, instagramPassword) => {
     console.log("upload path in fnc", uploadPath)
     try {
         // Log in to Instagram
         const ig = new IgApiClient();
-        ig.state.generateDevice(process.env.IG_USERNAME);
-        const logged = await ig.account.login(process.env.IG_USERNAME, process.env.IG_PASSWORD);
+        ig.state.generateDevice(instagramUser);
+        const logged = await ig.account.login(instagramUser, instagramPassword);
 
         const postEachVideo = await ig.publish.video({ 
             video: await readFileAsync(uploadPath), 
-            coverImage: await readFileAsync('./uploads/cover.jpg'),
+            coverImage: await readFileAsync(`./uploads/${accountType}/cover.jpg`),
             caption: `Today's story #instareels #reelvideo #kids #storytellers`, 
         });
         console.log(postEachVideo)
