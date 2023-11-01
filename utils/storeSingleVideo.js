@@ -6,12 +6,11 @@ const readFile = fs.readFile;
 const promisify = util.promisify;
 const readFileAsync = promisify(readFile);
 const videoshow = require('videoshow')
-const videoOptions = require("../utils/videoOptions")
-const imageOverlayKids = require("../utils/imageOverlayKids")
-const uploadIGKidsVideo = require("../utils/uploadIGKidsVideo")
+const videoOptions = require("./videoOptions")
+const imageOverlayKids = require("./imageOverlayKids")
+const uploadIGKidsVideo = require("./uploadIGKidsVideo")
 
-
-const storeKidsVideos = async (textData, imageFiles, title) => {
+const storeSingleVideo = async (textData, imageFiles, title) => {
     const sortedData = imageFiles.map((x, i) => ({ image: x[0].filename, script: textData[i] }))
     console.log(sortedData)
 
@@ -29,11 +28,11 @@ const storeKidsVideos = async (textData, imageFiles, title) => {
             })
             .on('end', function (output) {
                 imageOverlayKids(sortedData[0].image, title)
-                uploadIGKidsVideo(output)
+                // uploadIGKidsVideo(output)
             })
     } catch (error) {
         console.log(error)   
     }
 }
 
-module.exports = storeKidsVideos
+module.exports = storeSingleVideo
