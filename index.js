@@ -32,7 +32,7 @@ app.post('/kids/create-tale', upload.fields([{ name: 'kidsImage1' }, { name: 'ki
   const textData = [ req.body.scene1, req.body.scene2, req.body.scene3, req.body.scene4, req.body.scene5 ];
   const imageFiles = [ req.files.kidsImage1, req.files.kidsImage2, req.files.kidsImage3, req.files.kidsImage4, req.files.kidsImage5 ];
   try {
-    const storeSingleVideoResponse = await storeSingleVideo(textData, imageFiles, req.body.title, "kids")
+    const storeSingleVideoResponse = await storeSingleVideo(textData, imageFiles, req.body.title, "kids", process.env.IG_KIDSTELLERS_USERNAME, process.env.IG_KIDSTELLERS_PASSWORD)
     storeSingleVideoResponse && res.send(storeSingleVideoResponse);
   } catch (error) {
     console.log(error)
