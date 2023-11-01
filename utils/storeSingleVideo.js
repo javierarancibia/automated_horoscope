@@ -10,15 +10,15 @@ const videoOptions = require("./videoOptions")
 const imageOverlayKids = require("./imageOverlayKids")
 const uploadIGKidsVideo = require("./uploadIGKidsVideo")
 
-const storeSingleVideo = async (textData, imageFiles, title) => {
+const storeSingleVideo = async (textData, imageFiles, title, accountType) => {
     const sortedData = imageFiles.map((x, i) => ({ image: x[0].filename, script: textData[i] }))
     console.log(sortedData)
 
     try {
-        const images = sortedData.map(element => ({ path: `./uploads/${element.image}`, caption: element.script}))
+        const images = sortedData.map(element => ({ path: `./uploads/${accountType}/${element.image}`, caption: element.script}))
         videoshow(images, videoOptions)
             .audio('./audio/1.mp3')
-            .save('./uploads/video.mp4')
+            .save(`./uploads/${accountType}/video.mp4`)
             .on('start', function (command) {
                 console.log('ffmpeg process started:', command)
             })
@@ -27,7 +27,7 @@ const storeSingleVideo = async (textData, imageFiles, title) => {
                 console.error('ffmpeg stderr:', stderr)
             })
             .on('end', function (output) {
-                imageOverlayKids(sortedData[0].image, title)
+                imageOverlayKids(sortedData[0].image, title, accountType)
                 // uploadIGKidsVideo(output)
             })
     } catch (error) {

@@ -13,7 +13,12 @@ app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-
 // Storage function with Multer for PDF storage in Root Upload Folder
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-      return cb(null, "./uploads")
+    if (file.fieldname.includes("historyImage")){
+      return cb(null, "./uploads/history")
+    } else {
+      return cb(null, "./uploads/kids")
+    }
+    
   },
   filename: function (req, file, cb) {
     cb(null, file.fieldname + path.extname(file.originalname))
@@ -26,7 +31,7 @@ app.post('/kids/create-tale', upload.fields([{ name: 'sceneImage1' }, { name: 's
   const textData = [ req.body.scene1, req.body.scene2, req.body.scene3, req.body.scene4, req.body.scene5 ];
   const imageFiles = [ req.files.sceneImage1, req.files.sceneImage2, req.files.sceneImage3, req.files.sceneImage4, req.files.sceneImage5 ];
   try {
-    const storeSingleVideoResponse = await storeSingleVideo(textData, imageFiles, req.body.title)
+    const storeSingleVideoResponse = await storeSingleVideo(textData, imageFiles, req.body.title, "kids")
     storeSingleVideoResponse && res.send(storeSingleVideoResponse);
   } catch (error) {
     console.log(error)
@@ -39,7 +44,7 @@ app.post('/history/create-tale', upload.fields([{ name: 'historyImage1' }, { nam
   const imageFiles = [ req.files.historyImage1, req.files.historyImage2, req.files.historyImage3, req.files.historyImage4, req.files.historyImage5 ];
   console.log(textData, imageFiles)
   try {
-    const storeSingleVideoResponse = await storeSingleVideo(textData, imageFiles, req.body.title)
+    const storeSingleVideoResponse = await storeSingleVideo(textData, imageFiles, req.body.title, "history")
     storeSingleVideoResponse && res.send(storeSingleVideoResponse);
   } catch (error) {
     console.log(error)
