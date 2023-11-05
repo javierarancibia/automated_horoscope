@@ -17,7 +17,7 @@ const storeSingleVideo = async (textData, imageFiles, title, accountType, instag
     try {
         const images = sortedData.map(element => ({ path: `./uploads/${accountType}/${element.image}`, caption: element.script}))
         videoshow(images, videoOptions)
-            .audio('./audio/1.mp3')
+            .audio(`./audio/${Math.floor(Math.random() * 13)}.mp3`)
             .save(`./uploads/${accountType}/video.mp4`)
             .on('start', function (command) {
                 console.log('ffmpeg process started:', command)
