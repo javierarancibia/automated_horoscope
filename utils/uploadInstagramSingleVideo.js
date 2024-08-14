@@ -6,7 +6,7 @@ const readFile = fs.readFile;
 const promisify = util.promisify;
 const readFileAsync = promisify(readFile);
 
-const uploadInstagramSingleVideo = async (uploadPath, accountType, instagramUser, instagramPassword) => {
+const uploadInstagramSingleVideo = async (uploadPath, accountType, instagramUser, instagramPassword, videoCaption) => {
     console.log("upload path in fnc", uploadPath)
     try {
         // Log in to Instagram
@@ -17,7 +17,7 @@ const uploadInstagramSingleVideo = async (uploadPath, accountType, instagramUser
         const postEachVideo = await ig.publish.video({ 
             video: await readFileAsync(uploadPath), 
             coverImage: await readFileAsync(`./uploads/${accountType}/cover.jpg`),
-            caption: `Today's story #instareels #history #history_telling #storytellers`, 
+            caption: videoCaption, 
         });
         console.log(postEachVideo)
     } catch (error) {

@@ -67,7 +67,7 @@ app.post('/history/create-tale', upload.fields([{ name: 'historyImage1' }, { nam
   try {
     console.log(req.body)
     const imageFiles = fs.readdirSync('./uploads/history').filter(image => image.includes('jpeg'))
-    const storeSingleVideoResponse = await storeSingleVideo(textData, imageFiles, req.body.title, "history", process.env.IG_HISTORYTELLERS_USERNAME, process.env.IG_HISTORYTELLERS_PASSWORD)
+    const storeSingleVideoResponse = await storeSingleVideo(textData, imageFiles, req.body.title, "history", process.env.IG_HISTORYTELLERS_USERNAME, process.env.IG_HISTORYTELLERS_PASSWORD, req.body.videoCaption)
     storeSingleVideoResponse && res.send(storeSingleVideoResponse);
   } catch (error) {
     console.log(error)
