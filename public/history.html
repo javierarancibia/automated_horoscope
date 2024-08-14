@@ -78,7 +78,7 @@
     }
 
     // Function to store selected image from API into the local folder and display it
-    const storeImage = async (photo, customFileName, displayContainer) => {
+    const storeImage = async (photo, customFileName, displayContainer, previewContainer) => {
         const file = await imageUrlToFile(photo, customFileName);
         
         const formData = new FormData();
@@ -95,10 +95,12 @@
             if (response.ok) {
                 console.log('File uploaded successfully:', result.fileUrl);
                 // Display the uploaded image
+                previewContainer.innerHTML = ''
                 const img = document.createElement('img');
                 img.src = result.fileUrl; // Use the absolute file URL as-is
                 img.width = 150;
-                document.getElementById(displayContainer).appendChild(img);
+                img.style.border = 'solid 2px red'
+                previewContainer.appendChild(img);
             } else {
                 console.error('Failed to upload file:', result.message);
             }
@@ -126,7 +128,7 @@
 
             const data = await response.json();
             const photos = data.photos.map(photo => photo.src.portrait);
-            const previewContainer = document.getElementById(bulkPreviewDiv);
+            let previewContainer = document.getElementById(bulkPreviewDiv);
 
             // Clear the previous images if needed
             previewContainer.innerHTML = '';
@@ -137,7 +139,7 @@
                 img.width = 150;
 
                 // Attach the click event to the image
-                img.addEventListener('click', () => storeImage(photo, fileSceneName, displayContainer));
+                img.addEventListener('click', () => storeImage(photo, fileSceneName, displayContainer, previewContainer));
                 
                 previewContainer.appendChild(img);
             });
