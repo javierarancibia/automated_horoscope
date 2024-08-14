@@ -14,7 +14,10 @@
                 <label for="historyScene1" class="form-label d-block">Escena 1</label>
                 <input type="text" name="historyScene1" class="form-control" placeholder="Escena 1"><br>
                 <input type="file" name="historyImage1" accept="image/png, image/jpeg" class="my-2" onchange="previewImage(this, 'imagePreview1')" /><br>
-                <img id="imagePreview1" src="#" alt="Image Preview" style="display: none; max-width: 300px;">
+                <img id="imagePreview1" src="#" alt="Image Preview" style="display: none; max-width: 300px;"><br>
+                <input type="text" name="image_text_api_1" id="image_text_api_1" placeholder="Buscar Imagen en API">
+                <button type="button" onclick="getImageFromAPI(event, 'image_text_api_1', 'bulk_preview_1', 'historyImage1.jpeg', 'imagePreview1')">Buscar</button>
+                <div id="bulk_preview_1"></div>
             </div>
             <div style="width:100%; border: solid 1px blue; padding: 1.5rem; margin: 1rem 0;border-radius: 15px;">
                 <label for="historyScene2"  class="form-label d-block">Escena 2</label>
@@ -60,6 +63,88 @@
             imagePreview.style.display = 'none';
         }
     }
+
+    async function imageUrlToFile(imageUrl, fileName) {
+        // Fetch the image from the URL
+        const response = await fetch(imageUrl);
+
+        // Convert the response to a Blob
+        const blob = await response.blob();
+
+        // Create a File object from the Blob
+        const file = new File([blob], fileName, { type: blob.type });
+
+        return file;
+    }
+
+    // Function to store selected image from API into the local folder and display it
+    const storeImage = async (photo, customFileName, displayContainer) => {
+        const file = await imageUrlToFile(photo, customFileName);
+        
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const response = await fetch('/upload/history', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                console.log('File uploaded successfully:', result.fileUrl);
+                // Display the uploaded image
+                const img = document.createElement('img');
+                img.src = result.fileUrl; // Use the absolute file URL as-is
+                img.width = 150;
+                document.getElementById(displayContainer).appendChild(img);
+            } else {
+                console.error('Failed to upload file:', result.message);
+            }
+        } catch (error) {
+            console.error('Error uploading file:', error);
+        }
+    };
+
+    // Function to get Images from Pexels API
+    const getImageFromAPI = async (event, queryName, bulkPreviewDiv, fileSceneName, displayContainer) => {
+        event.preventDefault();
+        const searchQuery = document.getElementById(queryName).value;
+        const underscoredSearchQuery = searchQuery.replace(/ /g, "_");
+
+        try {
+            const url = `https://api.pexels.com/v1/search?query=${underscoredSearchQuery}`;
+
+            const response = await fetch(url, {
+                method: "GET",
+                headers: {
+                    "Authorization": "HkynUKOudYb0cApuNZav8S2wEuzfgApfQLCloQu9yaAe9LMGnd2sdeFC",
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const data = await response.json();
+            const photos = data.photos.map(photo => photo.src.portrait);
+            const previewContainer = document.getElementById(bulkPreviewDiv);
+
+            // Clear the previous images if needed
+            previewContainer.innerHTML = '';
+            console.log(photos)
+            photos.forEach((photo, index) => {
+                const img = document.createElement('img');
+                img.src = photo;
+                img.width = 150;
+
+                // Attach the click event to the image
+                img.addEventListener('click', () => storeImage(photo, fileSceneName, displayContainer));
+                
+                previewContainer.appendChild(img);
+            });
+        } catch (error) {
+            console.error('Error fetching images:', error);
+        }
+    };
 </script>
 
 </html>

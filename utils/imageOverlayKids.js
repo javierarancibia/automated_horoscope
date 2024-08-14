@@ -7,7 +7,7 @@ async function imageOverlay(imageFile, title, accountType) {
     const fontTitle = await Jimp.loadFont(Jimp.FONT_SANS_128_WHITE);
     image.print(fontTitle, 100, 750, title);
     // Writing image after processing
-    await image.writeAsync(`./uploads/${accountType}/cover.jpg`);
+    await image.writeAsync(`./uploads/${accountType}/cover.jpeg`);
     console.log("Image is processed succesfully");
 }
 

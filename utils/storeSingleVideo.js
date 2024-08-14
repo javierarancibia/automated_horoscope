@@ -11,8 +11,10 @@ const imageOverlayKids = require("./imageOverlayKids")
 const uploadInstagramSingleVideo = require("./uploadInstagramSingleVideo")
 
 const storeSingleVideo = async (textData, imageFiles, title, accountType, instagramUser, instagramPassword) => {
-    const sortedData = imageFiles.map((x, i) => ({ image: x[0].filename, script: textData[i] }))
-    console.log(sortedData)
+    // const sortedData = imageFiles.map((x, i) => ({ image: x[0].filename, script: textData[i] }))
+    const sortedData = imageFiles.map((x, i) => ({ image: x, script: textData[i] }))
+    const coverImage = sortedData[0].image
+    sortedData.shift() // remove first element which is the cover foto
 
     try {
         const images = sortedData.map(element => ({ path: `./uploads/${accountType}/${element.image}`, caption: element.script}))
@@ -27,7 +29,7 @@ const storeSingleVideo = async (textData, imageFiles, title, accountType, instag
                 console.error('ffmpeg stderr:', stderr)
             })
             .on('end', function (output) {
-                imageOverlayKids(sortedData[0].image, title, accountType)
+                imageOverlayKids(coverImage, title, accountType)
                 uploadInstagramSingleVideo(output, accountType, instagramUser, instagramPassword)
             })
     } catch (error) {
