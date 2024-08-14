@@ -16,7 +16,7 @@ const uploadInstagramSingleVideo = async (uploadPath, accountType, instagramUser
 
         const postEachVideo = await ig.publish.video({ 
             video: await readFileAsync(uploadPath), 
-            coverImage: await readFileAsync(`./uploads/${accountType}/cover.jpg`),
+            coverImage: await readFileAsync(`./uploads/${accountType}/cover.jpeg`),
             caption: videoCaption, 
         });
         console.log(postEachVideo)

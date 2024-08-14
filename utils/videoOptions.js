@@ -1,7 +1,7 @@
 
 const videoOptions = {
     fps: 25,
-    loop: 3, // seconds
+    loop: 5, // seconds
     transition: true,
     transitionDuration: .5, // seconds
     videoBitrate: 1024,
@@ -13,7 +13,7 @@ const videoOptions = {
     pixelFormat: 'yuv420p',
     subtitleStyle: {
         Fontname: 'Verdana',
-        Fontsize: '26',
+        Fontsize: '30',
         PrimaryColour: '11861244',
         SecondaryColour: '11861244',
         TertiaryColour: '11861244',
