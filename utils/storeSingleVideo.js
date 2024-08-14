@@ -8,7 +8,7 @@ const readFileAsync = promisify(readFile);
 const videoshow = require('videoshow')
 const videoOptions = require("./videoOptions")
 const imageOverlayKids = require("./imageOverlayKids")
-const uploadIGKidsVideo = require("./uploadIGKidsVideo")
+const uploadInstagramSingleVideo = require("./uploadInstagramSingleVideo")
 
 const storeSingleVideo = async (textData, imageFiles, title, accountType, instagramUser, instagramPassword) => {
     const sortedData = imageFiles.map((x, i) => ({ image: x[0].filename, script: textData[i] }))
@@ -28,7 +28,7 @@ const storeSingleVideo = async (textData, imageFiles, title, accountType, instag
             })
             .on('end', function (output) {
                 imageOverlayKids(sortedData[0].image, title, accountType)
-                uploadIGKidsVideo(output, accountType, instagramUser, instagramPassword)
+                uploadInstagramSingleVideo(output, accountType, instagramUser, instagramPassword)
             })
     } catch (error) {
         console.log(error)   
