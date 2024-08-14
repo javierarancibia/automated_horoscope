@@ -24,8 +24,11 @@
                 <input type="text" name="historyScene2" class="form-control" placeholder="Escena 2"><br>
                 <input type="file" name="historyImage2" accept="image/png, image/jpeg" class="my-2" onchange="previewImage(this, 'imagePreview2')" /><br>
                 <img id="imagePreview2" src="#" alt="Image Preview" style="display: none; max-width: 300px;">
+                <input type="text" name="image_text_api_2" id="image_text_api_2" placeholder="Buscar Imagen en API">
+                <button type="button" onclick="getImageFromAPI(event, 'image_text_api_2', 'bulk_preview_2', 'historyImage2.jpeg', 'imagePreview2')">Buscar</button>
+                <div id="bulk_preview_2"></div>
             </div>
-            <div style="width:100%; border: solid 1px blue; padding: 1.5rem; margin: 1rem 0;border-radius: 15px;">
+            <!-- <div style="width:100%; border: solid 1px blue; padding: 1.5rem; margin: 1rem 0;border-radius: 15px;">
                 <label for="historyScene3" class="form-label d-block">Escena 3</label>
                 <input type="text" name="historyScene3" class="form-control" placeholder="Escena 3"><br>
                 <input type="file" name="historyImage3" accept="image/png, image/jpeg" class="my-2" onchange="previewImage(this, 'imagePreview3')" /><br>
@@ -42,7 +45,7 @@
                 <input type="text" name="historyScene5" class="form-control" placeholder="Escena 5"><br>
                 <input type="file" name="historyImage5" accept="image/png, image/jpeg" class="my-2" onchange="previewImage(this, 'imagePreview5')" /><br>
                 <img id="imagePreview5" src="#" alt="Image Preview" style="display: none; max-width: 300px;">
-            </div>
+            </div> -->
             <input type="submit" style="background-color: blue;color:antiquewhite; width: 8rem; margin:auto" value="Submit">
         </form>
     </div>
@@ -132,7 +135,6 @@
 
             // Clear the previous images if needed
             previewContainer.innerHTML = '';
-            console.log(photos)
             photos.forEach((photo, index) => {
                 const img = document.createElement('img');
                 img.src = photo;

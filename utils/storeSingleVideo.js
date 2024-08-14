@@ -12,10 +12,9 @@ const uploadInstagramSingleVideo = require("./uploadInstagramSingleVideo")
 
 const storeSingleVideo = async (textData, imageFiles, title, accountType, instagramUser, instagramPassword) => {
     // const sortedData = imageFiles.map((x, i) => ({ image: x[0].filename, script: textData[i] }))
+    imageFiles.shift() // remove first element which is the cover foto
     const sortedData = imageFiles.map((x, i) => ({ image: x, script: textData[i] }))
     const coverImage = sortedData[0].image
-    sortedData.shift() // remove first element which is the cover foto
-
     try {
         const images = sortedData.map(element => ({ path: `./uploads/${accountType}/${element.image}`, caption: element.script}))
         videoshow(images, videoOptions)
@@ -33,7 +32,7 @@ const storeSingleVideo = async (textData, imageFiles, title, accountType, instag
                 uploadInstagramSingleVideo(output, accountType, instagramUser, instagramPassword)
             })
     } catch (error) {
-        console.log(error)   
+        console.log(error)
     }
 }
 
