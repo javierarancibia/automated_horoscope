@@ -1,9 +1,9 @@
 
 const videoOptions = {
     fps: 25,
-    loop: 5, // seconds
+    loop: 10, // seconds
     transition: true,
-    transitionDuration: .5, // seconds
+    transitionDuration: 1, // seconds
     videoBitrate: 1024,
     videoCodec: 'libx264',
     size: '1080x1920',
