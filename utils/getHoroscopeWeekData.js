@@ -5,7 +5,7 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 require("dotenv").config()
 
-const fetchHoroscopeWeekData = async () => {
+const getHoroscopeWeekData = async () => {
     const signs = ["aquarius", "aries", "cancer", "capricorn", "gemini", "leo", "libra", "pisces", "sagittarius", "scorpio", "taurus", "virgo"]
     const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     
@@ -34,18 +34,12 @@ const fetchHoroscopeWeekData = async () => {
         })
     );
 
-    weekHoroscope.then(res => {
-        const date = new Date()
-        storeDataDB({ week: date, signsData: res })
-    })
-
+    const signsData = await weekHoroscope
+    const date = new Date()
+    await connectDB(process.env.MONGO_URI)
+    const storage = await Horoscope.create({ week: date, signsData }) // Method to store object in MONGODB
+    return storage
 }
 
-// Store data in DB function
-const storeDataDB = async data => {
-    Horoscope.create(data) // Method to store object in MONGODB
-    await connectDB(process.env.MONGO_URI)
-} 
-
-fetchHoroscopeWeekData()
-// module.exports = fetchHoroscopeWeekData
+// getHoroscopeWeekData()
+module.exports = getHoroscopeWeekData

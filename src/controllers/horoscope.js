@@ -7,11 +7,21 @@ const Horoscope = require('../models/Horoscope')
 const imageOverlay = require("../../utils/imageOverlay")
 const storeIGVideos = require("../../utils/storeIGVideos")
 const uploadInstagramHoroscopeSingleVideo = require("../../utils/uploadInstagramHoroscopeSingleVideo")
+const getHoroscopeWeekData = require('../../utils/getHoroscopeWeekData')
 
 const getDailySigns = async (req, res) => { 
     connectDB(process.env.MONGO_URI)
     const todayHoroscope = await Horoscope.findOne({}, {}, { sort: { timestamp: -1 } });
     res.send("hello")
+}
+
+const storeWeeklyHoroscopeData = async (req, res) => {
+    try {
+        const weekHoroscope = await getHoroscopeWeekData()
+        res.status(200).json({ response: weekHoroscope })
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 const createSingleRandomVideo = async (req, res) => {
@@ -98,4 +108,4 @@ const createVideos = async (req, res) => {
     }
 }
 
-module.exports = { getDailySigns, createVideos, createSingleRandomVideo }
+module.exports = { getDailySigns, storeWeeklyHoroscopeData, createVideos, createSingleRandomVideo }
